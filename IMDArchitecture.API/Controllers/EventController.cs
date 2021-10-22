@@ -1,39 +1,110 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using IMDArchitecture.API.Domain;
+using IMDArchitecture.API.Ports;
 
 namespace IMDArchitecture.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("event")]
     public class EventController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        // noticce we don't care about our actual database implementation; we just pass an interface (== contract)
+        private readonly IDatabase _database;
 
+        // everything you use on _logger will end up on STDOUT (the terminal where you started your process)
         private readonly ILogger<EventController> _logger;
 
-        public EventController(ILogger<EventController> logger)
+        // This is called dependency injection; it makes it very easy to test this class as you don't "hardwire" a database in the
+        // test; you pass an interface containing a certain amount of methods. This will become clearer in the following lessons.
+        public EventController(ILogger<EventController> logger, IDatabase database)
         {
+            _database = database;
             _logger = logger;
         }
 
         [HttpGet]
-        public IEnumerable<Event> Get()
+        [ProducesResponseType(typeof(IEnumerable<ViewEvent>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> Get(string titleStartsWith) =>
+            Ok((await _database.GetAllEvents(titleStartsWith))
+                .Select(ViewEvent.FromModel).ToList());
+
+        [HttpGet("{EventId}")]
+        [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetEventById(string EventId)
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new Event
+            try
             {
-                Date = rng.Next(-20, 55),
-                Name = "jan",
-                Description = Summaries[rng.Next(Summaries.Length)],
-            })
-            .ToArray();
+                var Event = await _database.GetEventById(Guid.Parse(EventId));
+                if (Event != null)
+                {
+                    return Ok(ViewEvent.FromModel(Event));//event
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Got an error for {nameof(GetEventById)}");
+                // This is just good practice; you never want to expose a raw exception message. There are some libraries/services to handle this
+                // but it's better to take full control of your code.
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{EventId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteEventById(string EventId)
+        {
+            try
+            {
+                var parsedId = Guid.Parse(EventId);
+                var Event = await _database.GetEventById(parsedId);
+                if (Event != null)
+                {
+                    await _database.DeleteEvent(parsedId);
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Got an error for {nameof(DeleteEventById)}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut()]
+        [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> PersistEvent(CreateEvent Event)
+        {
+            try
+            {
+                var createdEvent = Event.ToEvent();//event
+                var persistedEvent = await _database.PersistEvent(createdEvent);
+                return CreatedAtAction(nameof(GetEventById), new { id = createdEvent.EventId.ToString() }, ViewEvent.FromModel(persistedEvent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Got an error for {nameof(PersistEvent)}");
+                return BadRequest(ex.Message);
+            }
         }
     }
+
 }
