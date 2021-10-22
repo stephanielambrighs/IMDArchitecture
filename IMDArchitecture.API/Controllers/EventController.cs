@@ -39,11 +39,11 @@ namespace IMDArchitecture.API.Controllers
         [HttpGet("{EventId}")]
         [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<Event> GetEventById(Guid EventId)
+        public async Task<IActionResult> GetEventById(string EventId)
         {
             try
             {
-                var Event = await _database.GetEventById(Guid.Parse(Event));
+                var Event = await _database.GetEventById(Guid.Parse(EventId));
                 if (Event != null)
                 {
                     return Ok(ViewEvent.FromModel(Event));//event
@@ -65,13 +65,13 @@ namespace IMDArchitecture.API.Controllers
         [HttpDelete("{EventId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteById(string id)
+        public async Task<IActionResult> DeleteEventById(string EventId)
         {
             try
             {
-                var parsedId = Guid.Parse(id);
-                var movie = await _database.GetEventById(parsedId);
-                if (movie != null)
+                var parsedId = Guid.Parse(EventId);
+                var Event = await _database.GetEventById(parsedId);
+                if (Event != null)
                 {
                     await _database.DeleteEvent(parsedId);
                     return NoContent();
@@ -83,7 +83,7 @@ namespace IMDArchitecture.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Got an error for {nameof(DeleteById)}");
+                _logger.LogError(ex, $"Got an error for {nameof(DeleteEventById)}");
                 return BadRequest(ex.Message);
             }
         }
@@ -91,13 +91,13 @@ namespace IMDArchitecture.API.Controllers
         [HttpPut()]
         [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PersistEvent(CreateEvent event)
-{
+        public async Task<IActionResult> PersistEvent(CreateEvent Event)
+        {
             try
             {
-                var createdEvent = movie.ToMovie();//event
-                var persistedEvent = await _database.PersistMovie(createdEvent);
-                return CreatedAtAction(nameof(GetById), new { id = createdEvent.Id.ToString() }, ViewEvent.FromModel(persistedEvent));
+                var createdEvent = Event.ToEvent();//event
+                var persistedEvent = await _database.PersistEvent(createdEvent);
+                return CreatedAtAction(nameof(GetEventById), new { id = createdEvent.EventId.ToString() }, ViewEvent.FromModel(persistedEvent));
             }
             catch (Exception ex)
             {
@@ -105,6 +105,6 @@ namespace IMDArchitecture.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        }
-
     }
+
+}
