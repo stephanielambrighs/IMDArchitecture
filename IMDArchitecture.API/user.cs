@@ -4,6 +4,7 @@ namespace IMDArchitecture.API
 {
     public class User
     {
+        public int UserId { get; set; }
         public string UserName { get; set; }
         public string Email { get; set; }
         public int Date_of_birth { get; set; }
