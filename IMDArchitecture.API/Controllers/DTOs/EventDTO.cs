@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using RandalsVideoStore.API.Domain;
+using IMDArchitecture.API.Domain;
 
 namespace IMDArchitecture.API.Controllers
 {
@@ -8,31 +8,31 @@ namespace IMDArchitecture.API.Controllers
     // for transferring data between layers of the application.
     public class CreateEvent
     {
-        public Guid? Id { get; set; }
-        public string Title { get; set; }
-        public int Year { get; set; }
-        public Event ToEvent() => new Event { Title = this.Title, Year = this.Year, Genres = this.Genres, Id = this.Id };
+        public int EventId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int Date { get; set; }
+        public int Participants { get; set; }
+        public int Target_age { get; set; }
+        public Event ToEvent() => new Event { EventId = this.EventId, Name = this.Name, Description = this.Description, Date = this.Date, Participants = this.Participants, Target_age = this.Target_age };
     }
 
     public class ViewEvent
     {
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public int Year { get; set; }
-        public string FormattedYear { get; set; }
-        public static ViewMovie FromModel(Event event) => new ViewEvent
+        public int EventId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int Date { get; set; }
+        public int Participants { get; set; }
+        public int Target_age { get; set; }
+        public static ViewEvent FromModel(Event Event) => new ViewEvent
         {
-            Id = event.Id.ToString(),
-            Title = movie.Title,
-            Year = movie.Year,
-            Genres = movie.Genres,
-            FormattedYear = FormatYear(movie.Year),
+            EventId = Event.EventId,
+            Name = Event.Name,
+            Description = Event.Description,
+            Date = Event.Date,
+            Participants = Event.Participants,
+            Target_age = Event.Target_age,
         };
-
-    private static string FormatYear(int year)
-    {
-        var yearAsString = year.ToString();
-        return yearAsString.Length == 4 ? $"'{yearAsString.Substring(2, 2)}" : yearAsString;
     }
-}
 }
