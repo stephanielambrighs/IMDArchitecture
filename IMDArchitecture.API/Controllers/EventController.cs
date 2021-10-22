@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using RandalsVideoStore.API.Domain;
-using RandalsVideoStore.API.Ports;
+using IMDArchitecture.API.Domain;
+using IMDArchitecture.API.Ports;
 
-namespace RandalsVideoStore.API.Controllers
+namespace IMDArchitecture.API.Controllers
 {
     [ApiController]
     [Route("event")]
@@ -36,75 +36,75 @@ namespace RandalsVideoStore.API.Controllers
             Ok((await _database.GetAllEvents(titleStartsWith))
                 .Select(ViewEvent.FromModel).ToList());
 
-        [HttpGet("{id}")]
+        [HttpGet("{EventId}")]
         [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<Event> GetEventById(Guid EventId)
         {
             try
             {
-                var event = await _database.GetEventById(Guid.Parse(id));
-                if (event != null)
+                var Event = await _database.GetEventById(Guid.Parse(Event));
+                if (Event != null)
                 {
-            return Ok(ViewEvent.FromModel(movie));//event
-        }
+                    return Ok(ViewEvent.FromModel(Event));//event
+                }
                 else
                 {
-            return NotFound();
-        }
-        }
+                    return NotFound();
+                }
+            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Got an error for {nameof(GetById)}");
+                _logger.LogError(ex, $"Got an error for {nameof(GetEventById)}");
                 // This is just good practice; you never want to expose a raw exception message. There are some libraries/services to handle this
                 // but it's better to take full control of your code.
                 return BadRequest(ex.Message);
-    }
-}
-
-[HttpDelete("{id}")]
-[ProducesResponseType(StatusCodes.Status204NoContent)]
-[ProducesResponseType(StatusCodes.Status404NotFound)]
-public async Task<IActionResult> DeleteById(string id)
-{
-    try
-    {
-        var parsedId = Guid.Parse(id);
-        var movie = await _database.GetEventById(parsedId);
-        if (movie != null)
-        {
-            await _database.DeleteEvent(parsedId);
-            return NoContent();
+            }
         }
-        else
-        {
-            return NotFound();
-        }
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, $"Got an error for {nameof(DeleteById)}");
-        return BadRequest(ex.Message);
-    }
-}
 
-[HttpPut()]
-[ProducesResponseType(typeof(ViewEvent), StatusCodes.Status201Created)]
-[ProducesResponseType(StatusCodes.Status400BadRequest)]
-public async Task<IActionResult> PersistEvent(CreateEvent event)
+        [HttpDelete("{EventId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteById(string id)
+        {
+            try
+            {
+                var parsedId = Guid.Parse(id);
+                var movie = await _database.GetEventById(parsedId);
+                if (movie != null)
+                {
+                    await _database.DeleteEvent(parsedId);
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Got an error for {nameof(DeleteById)}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut()]
+        [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> PersistEvent(CreateEvent event)
 {
-    try
-    {
-        var createdEvent = movie.ToMovie();//event
-        var persistedEvent = await _database.PersistMovie(createdEvent);
-        return CreatedAtAction(nameof(GetById), new { id = createdEvent.Id.ToString() }, ViewEvent.FromModel(persistedEvent));
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, $"Got an error for {nameof(PersistEvent)}");
-        return BadRequest(ex.Message);
-    }
-}
+            try
+            {
+                var createdEvent = movie.ToMovie();//event
+                var persistedEvent = await _database.PersistMovie(createdEvent);
+                return CreatedAtAction(nameof(GetById), new { id = createdEvent.Id.ToString() }, ViewEvent.FromModel(persistedEvent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Got an error for {nameof(PersistEvent)}");
+                return BadRequest(ex.Message);
+            }
+        }
         }
 
     }
