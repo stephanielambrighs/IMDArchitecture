@@ -1,63 +1,110 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using IMDArchitecture.API.Domain;
+using IMDArchitecture.API.Ports;
 
 namespace IMDArchitecture.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("user")]
     public class UserController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        // noticce we don't care about our actual database implementation; we just pass an interface (== contract)
+        private readonly IDatabase _database;
 
+        // everything you use on _logger will end up on STDOUT (the terminal where you started your process)
         private readonly ILogger<UserController> _logger;
 
-        public UserController(ILogger<UserController> logger)
+        // This is called dependency injection; it makes it very easy to test this class as you don't "hardwire" a database in the
+        // test; you pass an interface containing a certain amount of methods. This will become clearer in the following lessons.
+        public UserController(ILogger<UserController> logger, IDatabase database)
         {
+            _database = database;
             _logger = logger;
         }
 
         [HttpGet]
-        public IEnumerable<Event> Get()
+        [ProducesResponseType(typeof(IEnumerable<ViewUser>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> Get(string titleStartsWith) =>
+            Ok((await _database.GetAllUsers(titleStartsWith))
+                .Select(ViewUser.FromModel).ToList());
+
+        [HttpGet("{UserId}")]
+        [ProducesResponseType(typeof(ViewUser), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetUserById(string UserId)
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new Event
+            try
             {
-                Date = rng.Next(-20, 55),
-                Name = "jan",
-                Description = Summaries[rng.Next(Summaries.Length)],
-            })
-            .ToArray();
+                var User = await _database.GetUserById(Guid.Parse(UserId));
+                if (User != null)
+                {
+                    return Ok(ViewUser.FromModel(User));//event
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Got an error for {nameof(GetUserById)}");
+                // This is just good practice; you never want to expose a raw exception message. There are some libraries/services to handle this
+                // but it's better to take full control of your code.
+                return BadRequest(ex.Message);
+            }
         }
-        [HttpDelete]
-        public IEnumerable<Event> Delete()
+
+        [HttpDelete("{UserId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteUserById(string UserId)
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new Event
+            try
             {
-                Date = rng.Next(-20, 55),
-                Name = "jan",
-                Description = Summaries[rng.Next(Summaries.Length)],
-            })
-            .ToArray();
+                var parsedId = Guid.Parse(UserId);
+                var User = await _database.GetUserById(parsedId);
+                if (User != null)
+                {
+                    await _database.DeleteUser(parsedId);
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Got an error for {nameof(DeleteUserById)}");
+                return BadRequest(ex.Message);
+            }
         }
-        [HttpPut]
-        public IEnumerable<Event> Put()
+
+        [HttpPut()]
+        [ProducesResponseType(typeof(ViewUser), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> PersistUser(CreateUser User)
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new Event
+            try
             {
-                Date = rng.Next(-20, 55),
-                Name = "jan",
-                Description = Summaries[rng.Next(Summaries.Length)],
-            })
-            .ToArray();
+                var createdUser = User.ToUser();
+                var persistedUser = await _database.PersistUser(createdUser);
+                return CreatedAtAction(nameof(GetUserById), new { id = createdUser.UserId.ToString() }, ViewUser.FromModel(persistedUser));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Got an error for {nameof(PersistUser)}");
+                return BadRequest(ex.Message);
+            }
         }
     }
+
 }
