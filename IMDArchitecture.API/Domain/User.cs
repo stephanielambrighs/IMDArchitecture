@@ -1,6 +1,9 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using IMDArchitecture.API.Domain;
+using IMDArchitecture.API.Ports;
+using IMDArchitecture.API.Models;
 
 namespace IMDArchitecture.API.Domain
 {
@@ -8,9 +11,11 @@ namespace IMDArchitecture.API.Domain
     public class User
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int UserId { get; set; }
-        public string UserName { get; set; }
+        public Guid? UserId { get; set; }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
         public string Email { get; set; }
         public int Date_of_birth { get; set; }
+        public bool Administrator { get; set; }
     }
 }

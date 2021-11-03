@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using IMDArchitecture.API.Domain;
+using IMDArchitecture.API.Ports;
+using IMDArchitecture.API.Models;
 
 namespace IMDArchitecture.API.Controllers
 {
@@ -8,7 +10,7 @@ namespace IMDArchitecture.API.Controllers
     // for transferring data between layers of the application.
     public class CreateUser
     {
-        public int UserId { get; set; }
+        public Guid? UserId { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }
@@ -20,7 +22,7 @@ namespace IMDArchitecture.API.Controllers
 
     public class ViewUser
     {
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }
@@ -28,7 +30,7 @@ namespace IMDArchitecture.API.Controllers
         public bool Administrator { get; set; }
         public static ViewUser FromModel(User User) => new ViewUser
         {
-            UserId = User.UserId,
+            UserId = User.UserId.ToString(),
             Firstname = User.Firstname,
             Lastname = User.Lastname,
             Email = User.Email,
