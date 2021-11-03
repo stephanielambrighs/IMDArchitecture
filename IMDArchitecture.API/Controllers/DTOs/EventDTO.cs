@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using IMDArchitecture.API.Domain;
+using IMDArchitecture.API.Ports;
+using IMDArchitecture.API.Models;
 
 namespace IMDArchitecture.API.Controllers
 {
@@ -8,7 +10,7 @@ namespace IMDArchitecture.API.Controllers
     // for transferring data between layers of the application.
     public class CreateEvent
     {
-        public int EventId { get; set; }
+        public Guid? EventId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int Date { get; set; }
@@ -19,7 +21,7 @@ namespace IMDArchitecture.API.Controllers
 
     public class ViewEvent
     {
-        public int EventId { get; set; }
+        public string EventId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int Date { get; set; }
@@ -27,7 +29,7 @@ namespace IMDArchitecture.API.Controllers
         public int Target_age { get; set; }
         public static ViewEvent FromModel(Event Event) => new ViewEvent
         {
-            EventId = Event.EventId,
+            EventId = Event.EventId.ToString(),
             Name = Event.Name,
             Description = Event.Description,
             Date = Event.Date,

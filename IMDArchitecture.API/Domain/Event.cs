@@ -1,6 +1,9 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using IMDArchitecture.API.Domain;
+using IMDArchitecture.API.Ports;
+using IMDArchitecture.API.Models;
 
 namespace IMDArchitecture.API.Domain
 {
@@ -8,7 +11,7 @@ namespace IMDArchitecture.API.Domain
     public class Event
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int EventId { get; set; }
+        public Guid? EventId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int Date { get; set; }
