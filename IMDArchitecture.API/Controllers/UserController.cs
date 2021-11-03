@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using IMDArchitecture.API.Domain;
 using IMDArchitecture.API.Ports;
+using IMDArchitecture.API.Models;
+
 
 namespace IMDArchitecture.API.Controllers
 {
