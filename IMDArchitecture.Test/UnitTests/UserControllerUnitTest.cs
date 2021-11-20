@@ -33,7 +33,7 @@ namespace IMDArchitecture.Test.UnitTests
             // arrange
             // this is our happy flow: we ask for the id of an existing application
             var ourId = Guid.NewGuid();
-            var ourUser = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", Date_of_birth = 20, Administrator = false };
+            var ourUser = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", DateOfBirth = 20, Administrator = false };
             // set up the mock so that when we call the 'GetMovieById' method we return a predefined task
             // No database calls are happening here.
             _mockedDatabase.Setup(x => x.GetUserById(ourId)).Returns(Task.FromResult(ourUser));
@@ -49,7 +49,7 @@ namespace IMDArchitecture.Test.UnitTests
             Assert.Equal(ourUser.Firstname, viewModel.Firstname);
             Assert.Equal(ourUser.Lastname, viewModel.Lastname);
             Assert.Equal(ourUser.Email, viewModel.Email);
-            Assert.Equal(ourUser.Date_of_birth, viewModel.Date_of_birth);
+            Assert.Equal(ourUser.DateOfBirth, viewModel.DateOfBirth);
             Assert.Equal(ourUser.Administrator, viewModel.Administrator);
 
             _mockedLogger.VerifyAll();
@@ -61,7 +61,7 @@ namespace IMDArchitecture.Test.UnitTests
         {
             // arrange
             var ourId = Guid.NewGuid();
-            var User = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", Date_of_birth = 20, Administrator = false };
+            var User = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", DateOfBirth = 20, Administrator = false };
 
             _mockedDatabase.Setup(x => x.GetUserById(ourId)).Returns(Task.FromResult(null as User));
 
@@ -81,7 +81,7 @@ namespace IMDArchitecture.Test.UnitTests
         {
             // arrange
             var ourId = Guid.NewGuid();
-            var ourUser = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", Date_of_birth = 20, Administrator = false };
+            var ourUser = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", DateOfBirth = 20, Administrator = false };
 
             _mockedDatabase.Setup(x => x.GetUserById(ourId)).ThrowsAsync(new Exception("Jurien"));
 

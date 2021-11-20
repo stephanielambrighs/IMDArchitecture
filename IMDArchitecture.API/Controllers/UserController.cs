@@ -34,8 +34,8 @@ namespace IMDArchitecture.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<ViewUser>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Get(string titleStartsWith) =>
-            Ok((await _database.GetAllUsers(titleStartsWith))
+        public async Task<IActionResult> Get() =>
+            Ok((await _database.GetAllUsers())
                 .Select(ViewUser.FromModel).ToList());
 
         [HttpGet("{UserId}")]
@@ -75,7 +75,7 @@ namespace IMDArchitecture.API.Controllers
                 var User = await _database.GetUserById(parsedId);
                 if (User != null)
                 {
-                    await _database.DeleteUser(parsedId);
+                    await _database.DeleteUser(User);
                     return NoContent();
                 }
                 else
@@ -93,17 +93,35 @@ namespace IMDArchitecture.API.Controllers
         [HttpPut()]
         [ProducesResponseType(typeof(ViewUser), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PersistUser(CreateUser User)
+        public async Task<IActionResult> UpdateUser(CreateUser User)
         {
             try
             {
                 var createdUser = User.ToUser();
-                var persistedUser = await _database.PersistUser(createdUser);
+                var persistedUser = await _database.UpdateUser(createdUser);
                 return CreatedAtAction(nameof(GetUserById), new { id = createdUser.UserId.ToString() }, ViewUser.FromModel(persistedUser));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Got an error for {nameof(PersistUser)}");
+                _logger.LogError(ex, $"Got an error for {nameof(UpdateUser)}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("/createUser")]
+        [ProducesResponseType(typeof(ViewUser), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateUser(CreateUser User)
+        {
+            try
+            {
+                _logger.LogInformation("Create a new user");
+                var createUser = User.ToUser();
+                var persistedUser = await _database.CreateUser(createUser);
+                return CreatedAtAction(nameof(GetUserById), new { id = createUser.UserId.ToString() }, ViewUser.FromModel(persistedUser));
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(ex.Message);
             }
         }

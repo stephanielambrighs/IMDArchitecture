@@ -9,18 +9,16 @@ namespace IMDArchitecture.API.Ports
 {
     public interface IDatabase
     {
-        // Readonly collection indicates that you can't just add movies to the database via the collection.
-        Task<ReadOnlyCollection<Event>> GetAllEvents(string events);
-        Task<ReadOnlyCollection<User>> GetAllUsers(string users);
-
+        Task<ReadOnlyCollection<Event>> GetAllEvents();
+        Task<ReadOnlyCollection<User>> GetAllUsers();
         Task<Event> GetEventById(Guid EventId);
         Task<User> GetUserById(Guid UserId);
-
-        Task<Event> PersistEvent(Event Event);
-        Task<User> PersistUser(User User);
-
-        Task DeleteEvent(Guid parsedId);
-        Task DeleteUser(Guid parsedId);
+        Task<Event> CreateEvent(Event Event);
+        Task<User> CreateUser(User User);
+        Task<User> UpdateUser(User User);
+        Task<Event> UpdateEvent(Event Event);
+        Task DeleteEvent(Event Event);
+        Task DeleteUser(User User);
 
     }
 }

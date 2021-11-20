@@ -32,7 +32,6 @@ namespace IMDArchitecture.API
             services.AddDbContext<EventContext>(options =>
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             // Register the Swagger generator, defining 1 or more Swagger documents
-            // services.AddSwaggerGen();
             services.AddTransient<IDatabase, SqliteDatabase>();
             services.AddControllers();
             services.AddSwaggerGen(c =>

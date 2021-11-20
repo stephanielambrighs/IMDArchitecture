@@ -15,8 +15,19 @@ namespace IMDArchitecture.API.Controllers
         public string Description { get; set; }
         public int Date { get; set; }
         public int Participants { get; set; }
-        public int Target_age { get; set; }
-        public Event ToEvent() => new Event { EventId = this.EventId, Name = this.Name, Description = this.Description, Date = this.Date, Participants = this.Participants, Target_age = this.Target_age };
+        public int TargetAge { get; set; }
+        public Event ToEvent() => new Event { EventId = this.EventId, Name = this.Name, Description = this.Description, Date = this.Date, Participants = this.Participants, TargetAge = this.TargetAge };
+    }
+
+    public class UpdateEvent
+    {
+        public Guid? EventId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int Date { get; set; }
+        public int Participants { get; set; }
+        public int TargetAge { get; set; }
+        public Event ToEvent() => new Event { EventId = this.EventId, Name = this.Name, Description = this.Description, Date = this.Date, Participants = this.Participants, TargetAge = this.TargetAge };
     }
 
     public class ViewEvent
@@ -26,7 +37,7 @@ namespace IMDArchitecture.API.Controllers
         public string Description { get; set; }
         public int Date { get; set; }
         public int Participants { get; set; }
-        public int Target_age { get; set; }
+        public int TargetAge { get; set; }
         public static ViewEvent FromModel(Event Event) => new ViewEvent
         {
             EventId = Event.EventId.ToString(),
@@ -34,7 +45,7 @@ namespace IMDArchitecture.API.Controllers
             Description = Event.Description,
             Date = Event.Date,
             Participants = Event.Participants,
-            Target_age = Event.Target_age,
+            TargetAge = Event.TargetAge,
         };
     }
 }
