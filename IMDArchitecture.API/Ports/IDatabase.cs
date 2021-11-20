@@ -11,14 +11,12 @@ namespace IMDArchitecture.API.Ports
     {
         Task<ReadOnlyCollection<Event>> GetAllEvents();
         Task<ReadOnlyCollection<User>> GetAllUsers();
-
         Task<Event> GetEventById(Guid EventId);
         Task<User> GetUserById(Guid UserId);
-
-        Task<Event> PersistEvent(Event Event);
-        Task<User> PersistUser(User User);
-
+        Task<Event> CreateEvent(Event Event);
         Task<User> CreateUser(User User);
+        Task<User> UpdateUser(User User);
+        Task<Event> UpdateEvent(Event Event);
         Task DeleteEvent(Event Event);
         Task DeleteUser(User User);
 

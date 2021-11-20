@@ -53,7 +53,7 @@ namespace IMDArchitecture.API.Models
             return await _context.Users.FindAsync(UserId);
         }
 
-        public async Task<Event> PersistEvent(Event Event)
+        public async Task<Event> CreateEvent(Event Event)
         {
             if (Event.EventId == null)
             {
@@ -67,7 +67,7 @@ namespace IMDArchitecture.API.Models
             return Event;
         }
 
-        public async Task<User> PersistUser(User User)
+        public async Task<User> UpdateUser(User User)
         {
             if (User.UserId == null)
             {
@@ -93,6 +93,21 @@ namespace IMDArchitecture.API.Models
             }
             await _context.SaveChangesAsync();
             return User;
+        }
+
+        public async Task<Event> UpdateEvent(Event Event)
+        {
+
+            if (Event.EventId == null)
+            {
+                await _context.Events.AddAsync(Event);
+            }
+            else
+            {
+                _context.Events.Update(Event);
+            }
+            await _context.SaveChangesAsync();
+            return Event;
         }
     }
 }
