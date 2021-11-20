@@ -18,6 +18,7 @@ namespace IMDArchitecture.API.Ports
         Task<Event> PersistEvent(Event Event);
         Task<User> PersistUser(User User);
 
+        Task<User> CreateUser(User User);
         Task DeleteEvent(Event Event);
         Task DeleteUser(User User);
 

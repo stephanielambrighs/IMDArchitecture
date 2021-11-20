@@ -80,5 +80,19 @@ namespace IMDArchitecture.API.Models
             await _context.SaveChangesAsync();
             return User;
         }
+
+        public async Task<User> CreateUser(User User)
+        {
+            if (User.UserId == null)
+            {
+                await _context.Users.AddAsync(User);
+            }
+            else
+            {
+                _context.Users.Update(User);
+            }
+            await _context.SaveChangesAsync();
+            return User;
+        }
     }
 }

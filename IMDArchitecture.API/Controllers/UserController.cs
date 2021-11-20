@@ -107,6 +107,24 @@ namespace IMDArchitecture.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("/createUser")]
+        [ProducesResponseType(typeof(ViewUser), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateUser(CreateUser User)
+        {
+            try
+            {
+                _logger.LogInformation("Create a new user");
+                var createUser = User.ToUser();
+                var persistedUser = await _database.CreateUser(createUser);
+                return CreatedAtAction(nameof(GetUserById), new { id = createUser.UserId.ToString() }, ViewUser.FromModel(persistedUser));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
 }
