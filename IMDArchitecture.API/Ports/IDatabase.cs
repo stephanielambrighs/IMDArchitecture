@@ -18,8 +18,8 @@ namespace IMDArchitecture.API.Ports
         Task<Event> PersistEvent(Event Event);
         Task<User> PersistUser(User User);
 
-        Task DeleteEvent(Guid parsedId);
-        Task DeleteUser(Guid parsedId);
+        Task DeleteEvent(Event Event);
+        Task DeleteUser(User User);
 
     }
 }

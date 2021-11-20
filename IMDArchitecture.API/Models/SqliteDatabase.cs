@@ -17,17 +17,17 @@ namespace IMDArchitecture.API.Models
         {
             _context = context;
         }
-        public async Task DeleteEvent(Guid parsedId)
+        public async Task DeleteEvent(Event Event)
         {
-            var Event = await _context.Events.FindAsync(parsedId);
-            _context.Events.Remove(Event);
+            var events = await _context.Events.FindAsync(Event.EventId);
+            _context.Events.Remove(events);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteUser(Guid parsedId)
+        public async Task DeleteUser(User User)
         {
-            var User = await _context.Users.FindAsync(parsedId);
-            _context.Users.Remove(User);
+            var user = await _context.Users.FindAsync(User.UserId);
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
         }
 

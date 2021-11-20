@@ -75,7 +75,7 @@ namespace IMDArchitecture.API.Controllers
                 var User = await _database.GetUserById(parsedId);
                 if (User != null)
                 {
-                    await _database.DeleteUser(parsedId);
+                    await _database.DeleteUser(User);
                     return NoContent();
                 }
                 else

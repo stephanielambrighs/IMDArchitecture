@@ -74,7 +74,7 @@ namespace IMDArchitecture.API.Controllers
                 var Event = await _database.GetEventById(parsedId);
                 if (Event != null)
                 {
-                    await _database.DeleteEvent(parsedId);
+                    await _database.DeleteEvent(Event);
                     return NoContent();
                 }
                 else
