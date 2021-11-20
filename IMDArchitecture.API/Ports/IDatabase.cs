@@ -9,7 +9,6 @@ namespace IMDArchitecture.API.Ports
 {
     public interface IDatabase
     {
-        // Readonly collection indicates that you can't just add movies to the database via the collection.
         Task<ReadOnlyCollection<Event>> GetAllEvents(string events);
         Task<ReadOnlyCollection<User>> GetAllUsers(string users);
 

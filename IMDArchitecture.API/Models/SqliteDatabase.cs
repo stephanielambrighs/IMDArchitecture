@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using IMDArchitecture.API.Domain;
 using IMDArchitecture.API.Ports;
 using IMDArchitecture.API.Models;
-// using EFGetStarted;
 
 namespace IMDArchitecture.API.Models
 {
@@ -27,7 +26,6 @@ namespace IMDArchitecture.API.Models
 
         public async Task DeleteUser(Guid parsedId)
         {
-            // throw new NotImplementedException();
             var User = await _context.Users.FindAsync(parsedId);
             _context.Users.Remove(User);
             await _context.SaveChangesAsync();
@@ -42,7 +40,6 @@ namespace IMDArchitecture.API.Models
 
         public async Task<ReadOnlyCollection<User>> GetAllUsers(string users)
         {
-            // throw new NotImplementedException();
             var User = await _context.Users.Where(x => EF.Functions.Like(x.Firstname, $"{users}%")).ToArrayAsync();
             return Array.AsReadOnly(User);
         }
@@ -54,7 +51,6 @@ namespace IMDArchitecture.API.Models
 
         public async Task<User> GetUserById(Guid UserId)
         {
-            // throw new NotImplementedException();
             return await _context.Users.FindAsync(UserId);
         }
 
@@ -74,7 +70,6 @@ namespace IMDArchitecture.API.Models
 
         public async Task<User> PersistUser(User User)
         {
-            // throw new NotImplementedException();
             if (User.UserId == null)
             {
                 await _context.Users.AddAsync(User);
