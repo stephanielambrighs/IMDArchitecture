@@ -89,20 +89,38 @@ namespace IMDArchitecture.API.Controllers
             }
         }
 
-        [HttpPut()]
+        [HttpPost("/createEvent")]
         [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> PersistEvent(CreateEvent Event)
+        public async Task<IActionResult> CreateEvent(CreateEvent Event)
         {
             try
             {
-                var createdEvent = Event.ToEvent();//event
-                var persistedEvent = await _database.PersistEvent(createdEvent);
+                _logger.LogInformation("Create a new event");
+                var createdEvent = Event.ToEvent();
+                var persistedEvent = await _database.CreateEvent(createdEvent);
                 return CreatedAtAction(nameof(GetEventById), new { id = createdEvent.EventId.ToString() }, ViewEvent.FromModel(persistedEvent));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Got an error for {nameof(PersistEvent)}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut()]
+        [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<Event>> UpdateEvent(UpdateEvent Event)
+        {
+            try
+            {
+                var createdEvent = Event.ToEvent();
+                var persistedEvent = await _database.UpdateEvent(createdEvent);
+                return CreatedAtAction(nameof(GetEventById), new { id = createdEvent.EventId.ToString() }, ViewEvent.FromModel(persistedEvent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Got an error for {nameof(UpdateEvent)}");
                 return BadRequest(ex.Message);
             }
         }
