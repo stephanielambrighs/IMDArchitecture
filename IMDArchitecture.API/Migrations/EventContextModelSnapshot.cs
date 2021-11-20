@@ -34,7 +34,7 @@ namespace IMDArchitecture.API.Migrations
                     b.Property<int>("Participants")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Target_age")
+                    b.Property<int>("TargetAge")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("EventId");
@@ -51,7 +51,7 @@ namespace IMDArchitecture.API.Migrations
                     b.Property<bool>("Administrator")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Date_of_birth")
+                    b.Property<int>("DateOfBirth")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")

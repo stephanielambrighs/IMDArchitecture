@@ -16,6 +16,6 @@ namespace IMDArchitecture.API.Domain
         public string Description { get; set; }
         public int Date { get; set; }
         public int Participants { get; set; }
-        public int Target_age { get; set; }
+        public int TargetAge { get; set; }
     }
 }

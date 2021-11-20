@@ -16,7 +16,7 @@ namespace IMDArchitecture.API.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     Date = table.Column<int>(type: "INTEGER", nullable: false),
                     Participants = table.Column<int>(type: "INTEGER", nullable: false),
-                    Target_age = table.Column<int>(type: "INTEGER", nullable: false)
+                    TargetAge = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,7 +31,7 @@ namespace IMDArchitecture.API.Migrations
                     Firstname = table.Column<string>(type: "TEXT", nullable: true),
                     Lastname = table.Column<string>(type: "TEXT", nullable: true),
                     Email = table.Column<string>(type: "TEXT", nullable: true),
-                    Date_of_birth = table.Column<int>(type: "INTEGER", nullable: false),
+                    DateOfBirth = table.Column<int>(type: "INTEGER", nullable: false),
                     Administrator = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
