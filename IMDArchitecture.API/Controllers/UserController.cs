@@ -34,8 +34,8 @@ namespace IMDArchitecture.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<ViewUser>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Get(string titleStartsWith) =>
-            Ok((await _database.GetAllUsers(titleStartsWith))
+        public async Task<IActionResult> Get() =>
+            Ok((await _database.GetAllUsers())
                 .Select(ViewUser.FromModel).ToList());
 
         [HttpGet("{UserId}")]

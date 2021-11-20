@@ -33,8 +33,8 @@ namespace IMDArchitecture.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<ViewEvent>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Get(string titleStartsWith) =>
-            Ok((await _database.GetAllEvents(titleStartsWith))
+        public async Task<IActionResult> Get() =>
+            Ok((await _database.GetAllEvents())
                 .Select(ViewEvent.FromModel).ToList());
 
         [HttpGet("{EventId}")]

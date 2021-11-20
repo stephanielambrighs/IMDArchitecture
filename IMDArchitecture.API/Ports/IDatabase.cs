@@ -9,8 +9,8 @@ namespace IMDArchitecture.API.Ports
 {
     public interface IDatabase
     {
-        Task<ReadOnlyCollection<Event>> GetAllEvents(string events);
-        Task<ReadOnlyCollection<User>> GetAllUsers(string users);
+        Task<ReadOnlyCollection<Event>> GetAllEvents();
+        Task<ReadOnlyCollection<User>> GetAllUsers();
 
         Task<Event> GetEventById(Guid EventId);
         Task<User> GetUserById(Guid UserId);

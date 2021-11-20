@@ -31,16 +31,15 @@ namespace IMDArchitecture.API.Models
             await _context.SaveChangesAsync();
         }
 
-        public async Task<ReadOnlyCollection<Event>> GetAllEvents(string events)
+        public async Task<ReadOnlyCollection<Event>> GetAllEvents()
         {
-
-            var Event = await _context.Events.Where(x => EF.Functions.Like(x.Name, $"{events}%")).ToArrayAsync();
+            var Event = await _context.Events.ToArrayAsync();
             return Array.AsReadOnly(Event);
         }
 
-        public async Task<ReadOnlyCollection<User>> GetAllUsers(string users)
+        public async Task<ReadOnlyCollection<User>> GetAllUsers()
         {
-            var User = await _context.Users.Where(x => EF.Functions.Like(x.Firstname, $"{users}%")).ToArrayAsync();
+            var User = await _context.Users.ToArrayAsync();
             return Array.AsReadOnly(User);
         }
 
