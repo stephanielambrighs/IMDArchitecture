@@ -17,14 +17,14 @@ namespace IMDArchitecture.API.Controllers
     public class EventController : ControllerBase
     {
         // noticce we don't care about our actual database implementation; we just pass an interface (== contract)
-        private readonly IDatabase _database;
+        private readonly IEventRepository _database;
 
         // everything you use on _logger will end up on STDOUT (the terminal where you started your process)
         private readonly ILogger<EventController> _logger;
 
         // This is called dependency injection; it makes it very easy to test this class as you don't "hardwire" a database in the
         // test; you pass an interface containing a certain amount of methods. This will become clearer in the following lessons.
-        public EventController(ILogger<EventController> logger, IDatabase database)
+        public EventController(ILogger<EventController> logger, IEventRepository database)
         {
             _database = database;
             _logger = logger;
