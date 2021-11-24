@@ -19,17 +19,6 @@ namespace IMDArchitecture.API.Controllers
         public Event ToEvent() => new Event { EventId = this.EventId, Name = this.Name, Description = this.Description, Date = this.Date, Participants = this.Participants, TargetAge = this.TargetAge };
     }
 
-    public class UpdateEvent
-    {
-        public Guid? EventId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int Date { get; set; }
-        public int Participants { get; set; }
-        public int TargetAge { get; set; }
-        public Event ToEvent() => new Event { EventId = this.EventId, Name = this.Name, Description = this.Description, Date = this.Date, Participants = this.Participants, TargetAge = this.TargetAge };
-    }
-
     public class ViewEvent
     {
         public string EventId { get; set; }

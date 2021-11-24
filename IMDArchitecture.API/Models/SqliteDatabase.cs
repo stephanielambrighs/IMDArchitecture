@@ -94,20 +94,5 @@ namespace IMDArchitecture.API.Models
             await _context.SaveChangesAsync();
             return User;
         }
-
-        public async Task<Event> UpdateEvent(Event Event)
-        {
-
-            if (Event.EventId == null)
-            {
-                await _context.Events.AddAsync(Event);
-            }
-            else
-            {
-                _context.Events.Update(Event);
-            }
-            await _context.SaveChangesAsync();
-            return Event;
-        }
     }
 }

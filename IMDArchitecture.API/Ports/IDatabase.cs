@@ -16,7 +16,6 @@ namespace IMDArchitecture.API.Ports
         Task<Event> CreateEvent(Event Event);
         Task<User> CreateUser(User User);
         Task<User> UpdateUser(User User);
-        Task<Event> UpdateEvent(Event Event);
         Task DeleteEvent(Event Event);
         Task DeleteUser(User User);
 

@@ -57,8 +57,6 @@ namespace IMDArchitecture.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Got an error for {nameof(GetEventById)}");
-                // This is just good practice; you never want to expose a raw exception message. There are some libraries/services to handle this
-                // but it's better to take full control of your code.
                 return BadRequest(ex.Message);
             }
         }
@@ -89,6 +87,7 @@ namespace IMDArchitecture.API.Controllers
             }
         }
 
+        [HttpPut()]
         [HttpPost("/createEvent")]
         [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -107,23 +106,6 @@ namespace IMDArchitecture.API.Controllers
             }
         }
 
-        [HttpPut()]
-        [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Event>> UpdateEvent(UpdateEvent Event)
-        {
-            try
-            {
-                var createdEvent = Event.ToEvent();
-                var persistedEvent = await _database.UpdateEvent(createdEvent);
-                return CreatedAtAction(nameof(GetEventById), new { id = createdEvent.EventId.ToString() }, ViewEvent.FromModel(persistedEvent));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Got an error for {nameof(UpdateEvent)}");
-                return BadRequest(ex.Message);
-            }
-        }
     }
 
 }
