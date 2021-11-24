@@ -90,25 +90,7 @@ namespace IMDArchitecture.API.Controllers
             }
         }
 
-        // delete this function
         [HttpPut()]
-        [ProducesResponseType(typeof(ViewUser), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateUser(CreateUser User)
-        {
-            try
-            {
-                var createdUser = User.ToUser();
-                var persistedUser = await _database.UpdateUser(createdUser);
-                return CreatedAtAction(nameof(GetUserById), new { id = createdUser.UserId.ToString() }, ViewUser.FromModel(persistedUser));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Got an error for {nameof(UpdateUser)}");
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpPost("/createUser")]
         [ProducesResponseType(typeof(ViewUser), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -116,7 +98,6 @@ namespace IMDArchitecture.API.Controllers
         {
             try
             {
-                _logger.LogInformation("Create a new user");
                 var createUser = User.ToUser();
                 var persistedUser = await _database.CreateUser(createUser);
                 return CreatedAtAction(nameof(GetUserById), new { id = createUser.UserId.ToString() }, ViewUser.FromModel(persistedUser));
