@@ -19,11 +19,12 @@ namespace IMDArchitecture.Test.UnitTests
         private Mock<ILogger<EventController>> _mockedLogger = new Mock<ILogger<EventController>>();
         // Notice that we don't care what our database implementation looks like, since we "mock" (i.e. fake) it.
         // We are testing the behaviour of our controller in this class, not of the database. 
-        private Mock<IDatabase> _mockedDatabase = new Mock<IDatabase>();
+        private Mock<IEventRepository> _mockedDatabaseEvent = new Mock<IEventRepository>();
+
 
         public EventControllerUnitTest()
         {
-            _mockedDatabase.Reset();
+            _mockedDatabaseEvent.Reset();
             _mockedLogger.Reset();
         }
 
@@ -36,10 +37,9 @@ namespace IMDArchitecture.Test.UnitTests
             var ourEvent = new Event { EventId = ourId, Name = "yes", Description = "New Event", Date = 2021, Participants = 2, TargetAge = 18 };
             // set up the mock so that when we call the 'GetMovieById' method we return a predefined task
             // No database calls are happening here.
-            _mockedDatabase.Setup(x => x.GetEventById(ourId)).Returns(Task.FromResult(ourEvent));
-
+            _mockedDatabaseEvent.Setup(x => x.GetEventById(ourId)).Returns(Task.FromResult(ourEvent));
             // act
-            var controller = new EventController(_mockedLogger.Object, _mockedDatabase.Object);
+            var controller = new EventController(_mockedLogger.Object, _mockedDatabaseEvent.Object);
             var actualResult = await controller.GetEventById(ourId.ToString()) as OkObjectResult;
 
             // assert
@@ -53,7 +53,7 @@ namespace IMDArchitecture.Test.UnitTests
             Assert.Equal(ourEvent.TargetAge, viewModel.TargetAge);
 
             _mockedLogger.VerifyAll();
-            _mockedDatabase.VerifyAll();
+            _mockedDatabaseEvent.VerifyAll();
         }
 
         [Fact]
@@ -62,17 +62,17 @@ namespace IMDArchitecture.Test.UnitTests
             // arrange
             var ourId = Guid.NewGuid();
             var Event = new Event { EventId = ourId, Name = "yes", Description = "New Event", Date = 2021, Participants = 2, TargetAge = 18 };
-            _mockedDatabase.Setup(x => x.GetEventById(ourId)).Returns(Task.FromResult(null as Event));
+            _mockedDatabaseEvent.Setup(x => x.GetEventById(ourId)).Returns(Task.FromResult(null as Event));
 
             // act
-            var controller = new EventController(_mockedLogger.Object, _mockedDatabase.Object);
+            var controller = new EventController(_mockedLogger.Object, _mockedDatabaseEvent.Object);
 
             // assert
-            var result = await new EventController(_mockedLogger.Object, _mockedDatabase.Object).GetEventById(ourId.ToString());
+            var result = await new EventController(_mockedLogger.Object, _mockedDatabaseEvent.Object).GetEventById(ourId.ToString());
             Assert.IsType<NotFoundResult>(result);
 
             _mockedLogger.VerifyAll();
-            _mockedDatabase.VerifyAll();
+            _mockedDatabaseEvent.VerifyAll();
         }
 
         [Fact]
@@ -82,15 +82,15 @@ namespace IMDArchitecture.Test.UnitTests
             var ourId = Guid.NewGuid();
             var ourEvent = new Event { EventId = ourId, Name = "yes", Description = "New Event", Date = 2021, Participants = 2, TargetAge = 18 };
 
-            _mockedDatabase.Setup(x => x.GetEventById(ourId)).ThrowsAsync(new Exception("Biebob"));
+            _mockedDatabaseEvent.Setup(x => x.GetEventById(ourId)).ThrowsAsync(new Exception("Biebob"));
 
             // act
-            var result = await new EventController(_mockedLogger.Object, _mockedDatabase.Object).GetEventById(ourId.ToString());
+            var result = await new EventController(_mockedLogger.Object, _mockedDatabaseEvent.Object).GetEventById(ourId.ToString());
 
             // assert
             Assert.IsType<BadRequestObjectResult>(result);
             _mockedLogger.VerifyAll();
-            _mockedDatabase.VerifyAll();
+            _mockedDatabaseEvent.VerifyAll();
         }
     }
 }

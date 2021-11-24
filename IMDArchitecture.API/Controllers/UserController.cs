@@ -18,14 +18,14 @@ namespace IMDArchitecture.API.Controllers
     public class UserController : ControllerBase
     {
         // noticce we don't care about our actual database implementation; we just pass an interface (== contract)
-        private readonly IDatabase _database;
+        private readonly IUserRepository _database;
 
         // everything you use on _logger will end up on STDOUT (the terminal where you started your process)
         private readonly ILogger<UserController> _logger;
 
         // This is called dependency injection; it makes it very easy to test this class as you don't "hardwire" a database in the
         // test; you pass an interface containing a certain amount of methods. This will become clearer in the following lessons.
-        public UserController(ILogger<UserController> logger, IDatabase database)
+        public UserController(ILogger<UserController> logger, IUserRepository database)
         {
             _database = database;
             _logger = logger;
@@ -91,23 +91,6 @@ namespace IMDArchitecture.API.Controllers
         }
 
         [HttpPut()]
-        [ProducesResponseType(typeof(ViewUser), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateUser(CreateUser User)
-        {
-            try
-            {
-                var createdUser = User.ToUser();
-                var persistedUser = await _database.UpdateUser(createdUser);
-                return CreatedAtAction(nameof(GetUserById), new { id = createdUser.UserId.ToString() }, ViewUser.FromModel(persistedUser));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Got an error for {nameof(UpdateUser)}");
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpPost("/createUser")]
         [ProducesResponseType(typeof(ViewUser), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -115,7 +98,6 @@ namespace IMDArchitecture.API.Controllers
         {
             try
             {
-                _logger.LogInformation("Create a new user");
                 var createUser = User.ToUser();
                 var persistedUser = await _database.CreateUser(createUser);
                 return CreatedAtAction(nameof(GetUserById), new { id = createUser.UserId.ToString() }, ViewUser.FromModel(persistedUser));

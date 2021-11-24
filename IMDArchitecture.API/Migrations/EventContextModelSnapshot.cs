@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IMDArchitecture.API.Migrations
 {
-    [DbContext(typeof(EventContext))]
+    [DbContext(typeof(DatabaseContext))]
     partial class EventContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

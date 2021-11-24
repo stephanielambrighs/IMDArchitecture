@@ -17,14 +17,14 @@ namespace IMDArchitecture.API.Controllers
     public class EventController : ControllerBase
     {
         // noticce we don't care about our actual database implementation; we just pass an interface (== contract)
-        private readonly IDatabase _database;
+        private readonly IEventRepository _database;
 
         // everything you use on _logger will end up on STDOUT (the terminal where you started your process)
         private readonly ILogger<EventController> _logger;
 
         // This is called dependency injection; it makes it very easy to test this class as you don't "hardwire" a database in the
         // test; you pass an interface containing a certain amount of methods. This will become clearer in the following lessons.
-        public EventController(ILogger<EventController> logger, IDatabase database)
+        public EventController(ILogger<EventController> logger, IEventRepository database)
         {
             _database = database;
             _logger = logger;
@@ -57,8 +57,6 @@ namespace IMDArchitecture.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Got an error for {nameof(GetEventById)}");
-                // This is just good practice; you never want to expose a raw exception message. There are some libraries/services to handle this
-                // but it's better to take full control of your code.
                 return BadRequest(ex.Message);
             }
         }
@@ -89,6 +87,7 @@ namespace IMDArchitecture.API.Controllers
             }
         }
 
+        [HttpPut()]
         [HttpPost("/createEvent")]
         [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -107,23 +106,6 @@ namespace IMDArchitecture.API.Controllers
             }
         }
 
-        [HttpPut()]
-        [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Event>> UpdateEvent(UpdateEvent Event)
-        {
-            try
-            {
-                var createdEvent = Event.ToEvent();
-                var persistedEvent = await _database.UpdateEvent(createdEvent);
-                return CreatedAtAction(nameof(GetEventById), new { id = createdEvent.EventId.ToString() }, ViewEvent.FromModel(persistedEvent));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Got an error for {nameof(UpdateEvent)}");
-                return BadRequest(ex.Message);
-            }
-        }
     }
 
 }

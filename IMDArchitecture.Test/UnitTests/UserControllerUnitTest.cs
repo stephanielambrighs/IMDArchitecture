@@ -19,11 +19,11 @@ namespace IMDArchitecture.Test.UnitTests
         private Mock<ILogger<UserController>> _mockedLogger = new Mock<ILogger<UserController>>();
         // Notice that we don't care what our database implementation looks like, since we "mock" (i.e. fake) it.
         // We are testing the behaviour of our controller in this class, not of the database. 
-        private Mock<IDatabase> _mockedDatabase = new Mock<IDatabase>();
+        private Mock<IUserRepository> _mockedDatabaseUser = new Mock<IUserRepository>();
 
         public UserControllerUnitTest()
         {
-            _mockedDatabase.Reset();
+            _mockedDatabaseUser.Reset();
             _mockedLogger.Reset();
         }
 
@@ -36,10 +36,10 @@ namespace IMDArchitecture.Test.UnitTests
             var ourUser = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", DateOfBirth = 20, Administrator = false };
             // set up the mock so that when we call the 'GetMovieById' method we return a predefined task
             // No database calls are happening here.
-            _mockedDatabase.Setup(x => x.GetUserById(ourId)).Returns(Task.FromResult(ourUser));
+            _mockedDatabaseUser.Setup(x => x.GetUserById(ourId)).Returns(Task.FromResult(ourUser));
 
             // act
-            var controller = new UserController(_mockedLogger.Object, _mockedDatabase.Object);
+            var controller = new UserController(_mockedLogger.Object, _mockedDatabaseUser.Object);
             var actualResult = await controller.GetUserById(ourId.ToString()) as OkObjectResult;
 
             // assert
@@ -53,7 +53,7 @@ namespace IMDArchitecture.Test.UnitTests
             Assert.Equal(ourUser.Administrator, viewModel.Administrator);
 
             _mockedLogger.VerifyAll();
-            _mockedDatabase.VerifyAll();
+            _mockedDatabaseUser.VerifyAll();
         }
 
         [Fact]
@@ -63,17 +63,17 @@ namespace IMDArchitecture.Test.UnitTests
             var ourId = Guid.NewGuid();
             var User = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", DateOfBirth = 20, Administrator = false };
 
-            _mockedDatabase.Setup(x => x.GetUserById(ourId)).Returns(Task.FromResult(null as User));
+            _mockedDatabaseUser.Setup(x => x.GetUserById(ourId)).Returns(Task.FromResult(null as User));
 
             // act
-            var controller = new UserController(_mockedLogger.Object, _mockedDatabase.Object);
+            var controller = new UserController(_mockedLogger.Object, _mockedDatabaseUser.Object);
 
             // assert
-            var result = await new UserController(_mockedLogger.Object, _mockedDatabase.Object).GetUserById(ourId.ToString());
+            var result = await new UserController(_mockedLogger.Object, _mockedDatabaseUser.Object).GetUserById(ourId.ToString());
             Assert.IsType<NotFoundResult>(result);
 
             _mockedLogger.VerifyAll();
-            _mockedDatabase.VerifyAll();
+            _mockedDatabaseUser.VerifyAll();
         }
 
         [Fact]
@@ -83,15 +83,15 @@ namespace IMDArchitecture.Test.UnitTests
             var ourId = Guid.NewGuid();
             var ourUser = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", DateOfBirth = 20, Administrator = false };
 
-            _mockedDatabase.Setup(x => x.GetUserById(ourId)).ThrowsAsync(new Exception("Jurien"));
+            _mockedDatabaseUser.Setup(x => x.GetUserById(ourId)).ThrowsAsync(new Exception("Jurien"));
 
             // act
-            var result = await new UserController(_mockedLogger.Object, _mockedDatabase.Object).GetUserById(ourId.ToString());
+            var result = await new UserController(_mockedLogger.Object, _mockedDatabaseUser.Object).GetUserById(ourId.ToString());
 
             // assert
             Assert.IsType<BadRequestObjectResult>(result);
             _mockedLogger.VerifyAll();
-            _mockedDatabase.VerifyAll();
+            _mockedDatabaseUser.VerifyAll();
         }
     }
 }
