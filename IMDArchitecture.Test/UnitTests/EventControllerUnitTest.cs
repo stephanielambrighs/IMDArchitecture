@@ -34,7 +34,7 @@ namespace IMDArchitecture.Test.UnitTests
             // arrange
             // this is our happy flow: we ask for the id of an existing application
             var ourId = Guid.NewGuid();
-            var ourEvent = new Event { EventId = ourId, Name = "yes", Description = "New Event", Date = 2021, Participants = 2, TargetAge = 18 };
+            var ourEvent = new Event { EventId = ourId, Name = "yes", Description = "New Event", Date = 2021, ParticipantCount = 2, TargetAge = 18 };
             // set up the mock so that when we call the 'GetMovieById' method we return a predefined task
             // No database calls are happening here.
             _mockedDatabaseEvent.Setup(x => x.GetEventById(ourId)).Returns(Task.FromResult(ourEvent));
@@ -49,7 +49,7 @@ namespace IMDArchitecture.Test.UnitTests
             Assert.Equal(ourEvent.Name, viewModel.Name);
             Assert.Equal(ourEvent.Description, viewModel.Description);
             Assert.Equal(ourEvent.Date, viewModel.Date);
-            Assert.Equal(ourEvent.Participants, viewModel.Participants);
+            Assert.Equal(ourEvent.ParticipantCount, viewModel.ParticipantCount);
             Assert.Equal(ourEvent.TargetAge, viewModel.TargetAge);
 
             _mockedLogger.VerifyAll();
@@ -61,7 +61,7 @@ namespace IMDArchitecture.Test.UnitTests
         {
             // arrange
             var ourId = Guid.NewGuid();
-            var Event = new Event { EventId = ourId, Name = "yes", Description = "New Event", Date = 2021, Participants = 2, TargetAge = 18 };
+            var Event = new Event { EventId = ourId, Name = "yes", Description = "New Event", Date = 2021, ParticipantCount = 2, TargetAge = 18 };
             _mockedDatabaseEvent.Setup(x => x.GetEventById(ourId)).Returns(Task.FromResult(null as Event));
 
             // act
@@ -80,7 +80,7 @@ namespace IMDArchitecture.Test.UnitTests
         {
             // arrange
             var ourId = Guid.NewGuid();
-            var ourEvent = new Event { EventId = ourId, Name = "yes", Description = "New Event", Date = 2021, Participants = 2, TargetAge = 18 };
+            var ourEvent = new Event { EventId = ourId, Name = "yes", Description = "New Event", Date = 2021, ParticipantCount = 2, TargetAge = 18 };
 
             _mockedDatabaseEvent.Setup(x => x.GetEventById(ourId)).ThrowsAsync(new Exception("Biebob"));
 

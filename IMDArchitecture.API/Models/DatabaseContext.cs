@@ -5,8 +5,6 @@ using IMDArchitecture.API.Domain;
 using IMDArchitecture.API.Ports;
 using IMDArchitecture.API.Models;
 
-
-
 namespace IMDArchitecture.API.Models
 {
 
@@ -19,6 +17,6 @@ namespace IMDArchitecture.API.Models
 
         public DbSet<Event> Events { get; set; }
         public DbSet<User> Users { get; set; }
-
+        public DbSet<UserEvent> UserEvent { get; set; }
     }
 }

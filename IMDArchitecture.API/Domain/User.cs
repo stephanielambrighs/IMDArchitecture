@@ -4,6 +4,8 @@ using System.Text.Json.Serialization;
 using IMDArchitecture.API.Domain;
 using IMDArchitecture.API.Ports;
 using IMDArchitecture.API.Models;
+using System.Collections.Generic;
+using SQLiteNetExtensions.Attributes;
 
 namespace IMDArchitecture.API.Domain
 {
@@ -17,5 +19,8 @@ namespace IMDArchitecture.API.Domain
         public string Email { get; set; }
         public int DateOfBirth { get; set; }
         public bool Administrator { get; set; }
+
+        [ManyToMany(typeof(UserEvent))]
+        public List<Event> Event { get; set; }
     }
 }
