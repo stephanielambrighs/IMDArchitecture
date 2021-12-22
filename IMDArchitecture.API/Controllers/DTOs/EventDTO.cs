@@ -3,6 +3,8 @@ using System.Linq;
 using IMDArchitecture.API.Domain;
 using IMDArchitecture.API.Ports;
 using IMDArchitecture.API.Models;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace IMDArchitecture.API.Controllers
 {
@@ -10,30 +12,40 @@ namespace IMDArchitecture.API.Controllers
     // for transferring data between layers of the application.
     public class CreateEvent
     {
-        public Guid? EventId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int Date { get; set; }
-        public int Participants { get; set; }
+        public int ParticipantCount { get; set; }
         public int TargetAge { get; set; }
-        public Event ToEvent() => new Event { EventId = this.EventId, Name = this.Name, Description = this.Description, Date = this.Date, Participants = this.Participants, TargetAge = this.TargetAge };
+        public Event ToEvent() => new Event { Name = this.Name, Description = this.Description, Date = this.Date, ParticipantCount = this.ParticipantCount, TargetAge = this.TargetAge };
+    }
+
+    public class UpdateEvent
+    {
+        public int EventId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int Date { get; set; }
+        public int ParticipantCount { get; set; }
+        public int TargetAge { get; set; }
+        public Event updateEvent() => new Event { EventId = this.EventId, Name = this.Name, Description = this.Description, Date = this.Date, ParticipantCount = this.ParticipantCount, TargetAge = this.TargetAge };
     }
 
     public class ViewEvent
     {
-        public string EventId { get; set; }
+        public int EventId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int Date { get; set; }
-        public int Participants { get; set; }
+        public int ParticipantCount { get; set; }
         public int TargetAge { get; set; }
         public static ViewEvent FromModel(Event Event) => new ViewEvent
         {
-            EventId = Event.EventId.ToString(),
+            EventId = Event.EventId,
             Name = Event.Name,
             Description = Event.Description,
             Date = Event.Date,
-            Participants = Event.Participants,
+            ParticipantCount = Event.ParticipantCount,
             TargetAge = Event.TargetAge,
         };
     }

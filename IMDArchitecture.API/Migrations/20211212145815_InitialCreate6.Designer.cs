@@ -9,14 +9,29 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IMDArchitecture.API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20211103150454_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20211212145815_InitialCreate6")]
+    partial class InitialCreate6
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.10");
+
+            modelBuilder.Entity("EventUser", b =>
+                {
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("EventId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EventUser");
+                });
 
             modelBuilder.Entity("IMDArchitecture.API.Domain.Event", b =>
                 {
@@ -68,6 +83,44 @@ namespace IMDArchitecture.API.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("IMDArchitecture.API.Domain.UserEvent", b =>
+                {
+                    b.Property<Guid?>("UserEventId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("Enrolled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RegisterTime")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("UserEventId");
+
+                    b.ToTable("UserEvent");
+                });
+
+            modelBuilder.Entity("EventUser", b =>
+                {
+                    b.HasOne("IMDArchitecture.API.Domain.Event", null)
+                        .WithMany()
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("IMDArchitecture.API.Domain.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

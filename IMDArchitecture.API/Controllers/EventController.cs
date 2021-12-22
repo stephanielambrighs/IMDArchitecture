@@ -40,11 +40,11 @@ namespace IMDArchitecture.API.Controllers
         [HttpGet("{EventId}")]
         [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetEventById(string EventId)
+        public async Task<IActionResult> GetEventById(int EventId)
         {
             try
             {
-                var Event = await _database.GetEventById(Guid.Parse(EventId));
+                var Event = await _database.GetEventById(EventId);
                 if (Event != null)
                 {
                     return Ok(ViewEvent.FromModel(Event));//event
@@ -64,12 +64,11 @@ namespace IMDArchitecture.API.Controllers
         [HttpDelete("{EventId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteEventById(string EventId)
+        public async Task<IActionResult> DeleteEventById(int EventId)
         {
             try
             {
-                var parsedId = Guid.Parse(EventId);
-                var Event = await _database.GetEventById(parsedId);
+                var Event = await _database.GetEventById(EventId);
                 if (Event != null)
                 {
                     await _database.DeleteEvent(Event);
@@ -87,7 +86,25 @@ namespace IMDArchitecture.API.Controllers
             }
         }
 
-        [HttpPut()]
+        [HttpPut("/updateEvent/{EventId}")]
+        [ProducesResponseType(typeof(ViewUser), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateEvent(UpdateEvent Event)
+        {
+            try
+            {
+                var editEvent = Event.updateEvent();
+                var persistedEvent = await _database.UpdateEvent(editEvent);
+                return new CreatedResult("/", null);
+                // return CreatedAtAction(nameof(GetEventById), new { id = persistedEvent.EventId.ToString() }, ViewEvent.FromModel(persistedEvent));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
         [HttpPost("/createEvent")]
         [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -98,7 +115,8 @@ namespace IMDArchitecture.API.Controllers
                 _logger.LogInformation("Create a new event");
                 var createdEvent = Event.ToEvent();
                 var persistedEvent = await _database.CreateEvent(createdEvent);
-                return CreatedAtAction(nameof(GetEventById), new { id = createdEvent.EventId.ToString() }, ViewEvent.FromModel(persistedEvent));
+                return new CreatedResult("/", null);
+                // return CreatedAtAction(nameof(GetEventById), new { id = createdEvent.EventId.ToString() }, ViewEvent.FromModel(persistedEvent));
             }
             catch (Exception ex)
             {

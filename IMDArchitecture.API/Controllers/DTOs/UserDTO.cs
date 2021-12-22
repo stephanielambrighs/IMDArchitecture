@@ -10,19 +10,30 @@ namespace IMDArchitecture.API.Controllers
     // for transferring data between layers of the application.
     public class CreateUser
     {
-        public Guid? UserId { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }
         public int DateOfBirth { get; set; }
         public bool Administrator { get; set; }
 
-        public User ToUser() => new User { UserId = this.UserId, Firstname = this.Firstname, Lastname = this.Lastname, Email = this.Email, DateOfBirth = this.DateOfBirth, Administrator = this.Administrator };
+        public User ToUser() => new User { Firstname = this.Firstname, Lastname = this.Lastname, Email = this.Email, DateOfBirth = this.DateOfBirth, Administrator = this.Administrator };
+    }
+
+    public class UpdateUser
+    {
+        public int UserId { get; set; }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
+        public string Email { get; set; }
+        public int DateOfBirth { get; set; }
+        public bool Administrator { get; set; }
+
+        public User updateUser() => new User { UserId = this.UserId, Firstname = this.Firstname, Lastname = this.Lastname, Email = this.Email, DateOfBirth = this.DateOfBirth, Administrator = this.Administrator };
     }
 
     public class ViewUser
     {
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }
@@ -30,7 +41,7 @@ namespace IMDArchitecture.API.Controllers
         public bool Administrator { get; set; }
         public static ViewUser FromModel(User User) => new ViewUser
         {
-            UserId = User.UserId.ToString(),
+            UserId = User.UserId,
             Firstname = User.Firstname,
             Lastname = User.Lastname,
             Email = User.Email,
