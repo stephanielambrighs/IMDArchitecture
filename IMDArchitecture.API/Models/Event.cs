@@ -30,13 +30,20 @@ namespace IMDArchitecture.API.Models
             return Array.AsReadOnly(Event);
         }
 
-        public async Task<Event> GetEventById(Guid EventId)
+        public async Task<Event> GetEventById(int EventId)
         {
             return await _context.Events.FindAsync(EventId);
         }
         public async Task<Event> CreateEvent(Event Event)
         {
-            if (Event.EventId == null)
+            _context.Events.Update(Event);
+            await _context.SaveChangesAsync();
+            return Event;
+        }
+
+        public async Task<Event> UpdateEvent(Event Event)
+        {
+            if (Event.EventId == 0)
             {
                 await _context.Events.AddAsync(Event);
             }
