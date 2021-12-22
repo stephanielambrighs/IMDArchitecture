@@ -10,7 +10,7 @@ namespace IMDArchitecture.API.Ports
     public interface IUserRepository
     {
         Task<ReadOnlyCollection<User>> GetAllUsers();
-        Task<User> GetUserById(Guid UserId);
+        Task<User> GetUserById(int UserId);
         Task<User> CreateUser(User User);
         Task<User> UpdateUser(User User);
         Task DeleteUser(User User);

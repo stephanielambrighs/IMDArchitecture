@@ -33,14 +33,14 @@ namespace IMDArchitecture.API.Models
         }
 
 
-        public async Task<User> GetUserById(Guid UserId)
+        public async Task<User> GetUserById(int UserId)
         {
             return await _context.Users.FindAsync(UserId);
         }
 
         public async Task<User> UpdateUser(User User)
         {
-            if (User.UserId == null)
+            if (User.UserId == 0)
             {
                 await _context.Users.AddAsync(User);
             }
@@ -54,14 +54,7 @@ namespace IMDArchitecture.API.Models
 
         public async Task<User> CreateUser(User User)
         {
-            if (User.UserId == null)
-            {
-                await _context.Users.AddAsync(User);
-            }
-            else
-            {
-                _context.Users.Update(User);
-            }
+            _context.Users.Update(User);
             await _context.SaveChangesAsync();
             return User;
         }

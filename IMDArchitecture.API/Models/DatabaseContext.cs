@@ -17,6 +17,9 @@ namespace IMDArchitecture.API.Models
 
         public DbSet<Event> Events { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<UserEvent> UserEvent { get; set; }
+        public DbSet<UserEvent> UserEvents { get; set; }
     }
+
+
+
 }
