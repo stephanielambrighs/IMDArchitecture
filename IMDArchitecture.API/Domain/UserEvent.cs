@@ -6,25 +6,30 @@ using IMDArchitecture.API.Ports;
 using IMDArchitecture.API.Models;
 using System.Collections.Generic;
 using System.Xml.Serialization;
-using SQLiteNetExtensions.Attributes;
-
+using System.ComponentModel.DataAnnotations;
 
 namespace IMDArchitecture.API.Domain
 {
 
     public class UserEvent
     {
-        public Guid? UserEventId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        public int UserEventId { get; set; }
 
-        [SQLiteNetExtensions.Attributes.ForeignKey(typeof(User))]
+        [Required]
         public int UserId { get; set; }
 
-        [SQLiteNetExtensions.Attributes.ForeignKey(typeof(Event))]
+        [Required]
         public int EventId { get; set; }
 
         public bool Enrolled { get; set; }
 
         public int RegisterTime { get; set; }
+
+        public User Users { get; set; }
+
+        public Event Events { get; set; }
 
     }
 
