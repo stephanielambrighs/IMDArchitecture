@@ -34,6 +34,8 @@ namespace IMDArchitecture.API
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddTransient<IEventRepository, EventDb>();
             services.AddTransient<IUserRepository, UserDb>();
+            services.AddTransient<IUserEventRepository, UserEventDb>();
+
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
