@@ -89,7 +89,7 @@ namespace IMDArchitecture.API.Controllers
             }
         }
 
-        [HttpPut("/updateUser/{UserId}")]
+        [HttpPut("/user/{UserId}")]
         [ProducesResponseType(typeof(ViewUser), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateUser(UpdateUser User)
@@ -108,7 +108,7 @@ namespace IMDArchitecture.API.Controllers
         }
 
 
-        [HttpPost("/createUser")]
+        [HttpPost("/user")]
         [ProducesResponseType(typeof(ViewUser), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateUser(CreateUser User)

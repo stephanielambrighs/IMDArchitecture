@@ -86,7 +86,7 @@ namespace IMDArchitecture.API.Controllers
             }
         }
 
-        [HttpPut("/updateEvent/{EventId}")]
+        [HttpPut("/event/{EventId}")]
         [ProducesResponseType(typeof(ViewUser), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateEvent(UpdateEvent Event)
@@ -105,7 +105,7 @@ namespace IMDArchitecture.API.Controllers
         }
 
 
-        [HttpPost("/createEvent")]
+        [HttpPost("/event")]
         [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateEvent(CreateEvent Event)
