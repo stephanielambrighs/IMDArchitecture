@@ -16,19 +16,11 @@ namespace IMDArchitecture.API.Domain
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public int UserEventId { get; set; }
-
-        [Required]
-        public int UserId { get; set; }
-
-        [Required]
-        public int EventId { get; set; }
-
+        public int UserRelationId { get; set; }
+        public int EventRelationId { get; set; }
         public bool Enrolled { get; set; }
-
         public int RegisterTime { get; set; }
-
         public User Users { get; set; }
-
         public Event Events { get; set; }
 
     }
