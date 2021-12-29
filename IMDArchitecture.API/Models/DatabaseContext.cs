@@ -7,14 +7,12 @@ using IMDArchitecture.API.Models;
 
 namespace IMDArchitecture.API.Models
 {
-
     public class DatabaseContext : DbContext
     {
         public DatabaseContext(DbContextOptions<DatabaseContext> ctx) : base(ctx)
         {
 
         }
-
         public DbSet<Event> Events { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserEvent> UserEvents { get; set; }

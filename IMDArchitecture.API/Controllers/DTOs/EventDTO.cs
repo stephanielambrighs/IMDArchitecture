@@ -14,10 +14,10 @@ namespace IMDArchitecture.API.Controllers
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public int Date { get; set; }
-        public int ParticipantCount { get; set; }
-        public int TargetAge { get; set; }
-        public Event ToEvent() => new Event { Name = this.Name, Description = this.Description, Date = this.Date, ParticipantCount = this.ParticipantCount, TargetAge = this.TargetAge };
+        public DateTime Date { get; set; }
+        public int MinAge { get; set; }
+        public int MaxAge { get; set; }
+        public Event ToEvent() => new Event { Name = this.Name, Description = this.Description, Date = this.Date, MinAge = this.MinAge, MaxAge = this.MaxAge };
     }
 
     public class UpdateEvent
@@ -25,10 +25,10 @@ namespace IMDArchitecture.API.Controllers
         public int EventId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int Date { get; set; }
-        public int ParticipantCount { get; set; }
-        public int TargetAge { get; set; }
-        public Event updateEvent() => new Event { EventId = this.EventId, Name = this.Name, Description = this.Description, Date = this.Date, ParticipantCount = this.ParticipantCount, TargetAge = this.TargetAge };
+        public DateTime Date { get; set; }
+        public int MinAge { get; set; }
+        public int MaxAge { get; set; }
+        public Event updateEvent() => new Event { EventId = this.EventId, Name = this.Name, Description = this.Description, Date = this.Date, MinAge = this.MinAge, MaxAge = this.MaxAge };
     }
 
     public class ViewEvent
@@ -36,9 +36,10 @@ namespace IMDArchitecture.API.Controllers
         public int EventId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int Date { get; set; }
+        public DateTime Date { get; set; }
         public int ParticipantCount { get; set; }
-        public int TargetAge { get; set; }
+        public int MinAge { get; set; }
+        public int MaxAge { get; set; }
         public static ViewEvent FromModel(Event Event) => new ViewEvent
         {
             EventId = Event.EventId,
@@ -46,7 +47,8 @@ namespace IMDArchitecture.API.Controllers
             Description = Event.Description,
             Date = Event.Date,
             ParticipantCount = Event.ParticipantCount,
-            TargetAge = Event.TargetAge,
+            MinAge = Event.MinAge,
+            MaxAge = Event.MaxAge,
         };
     }
 }

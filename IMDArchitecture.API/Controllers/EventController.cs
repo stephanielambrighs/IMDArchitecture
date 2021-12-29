@@ -16,10 +16,7 @@ namespace IMDArchitecture.API.Controllers
     [Route("event")]
     public class EventController : ControllerBase
     {
-        // noticce we don't care about our actual database implementation; we just pass an interface (== contract)
         private readonly IEventRepository _database;
-
-        // everything you use on _logger will end up on STDOUT (the terminal where you started your process)
         private readonly ILogger<EventController> _logger;
 
         // This is called dependency injection; it makes it very easy to test this class as you don't "hardwire" a database in the
@@ -37,6 +34,7 @@ namespace IMDArchitecture.API.Controllers
             Ok((await _database.GetAllEvents())
                 .Select(ViewEvent.FromModel).ToList());
 
+
         [HttpGet("{EventId}")]
         [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -47,7 +45,7 @@ namespace IMDArchitecture.API.Controllers
                 var Event = await _database.GetEventById(EventId);
                 if (Event != null)
                 {
-                    return Ok(ViewEvent.FromModel(Event));//event
+                    return Ok(ViewEvent.FromModel(Event));
                 }
                 else
                 {
@@ -60,6 +58,32 @@ namespace IMDArchitecture.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        [HttpGet("getEventByAge/{age}")]
+        [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetEventByAge(int age)
+        {
+            try
+            {
+                var eventAge = await _database.GetEventByAge(age);
+                if (eventAge != null)
+                {
+                    return Ok(eventAge);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Got an error for {nameof(GetEventByAge)}");
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpDelete("{EventId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -86,6 +110,7 @@ namespace IMDArchitecture.API.Controllers
             }
         }
 
+
         [HttpPut("/event/{EventId}")]
         [ProducesResponseType(typeof(ViewUser), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -96,7 +121,6 @@ namespace IMDArchitecture.API.Controllers
                 var editEvent = Event.updateEvent();
                 var persistedEvent = await _database.UpdateEvent(editEvent);
                 return new CreatedResult("/", null);
-                // return CreatedAtAction(nameof(GetEventById), new { id = persistedEvent.EventId.ToString() }, ViewEvent.FromModel(persistedEvent));
             }
             catch (Exception ex)
             {
@@ -116,7 +140,6 @@ namespace IMDArchitecture.API.Controllers
                 var createdEvent = Event.ToEvent();
                 var persistedEvent = await _database.CreateEvent(createdEvent);
                 return new CreatedResult("/", null);
-                // return CreatedAtAction(nameof(GetEventById), new { id = createdEvent.EventId.ToString() }, ViewEvent.FromModel(persistedEvent));
             }
             catch (Exception ex)
             {

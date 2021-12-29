@@ -17,14 +17,8 @@ namespace IMDArchitecture.API.Controllers
     [Route("user")]
     public class UserController : ControllerBase
     {
-        // noticce we don't care about our actual database implementation; we just pass an interface (== contract)
         private readonly IUserRepository _database;
-
-        // everything you use on _logger will end up on STDOUT (the terminal where you started your process)
         private readonly ILogger<UserController> _logger;
-
-        // This is called dependency injection; it makes it very easy to test this class as you don't "hardwire" a database in the
-        // test; you pass an interface containing a certain amount of methods. This will become clearer in the following lessons.
         public UserController(ILogger<UserController> logger, IUserRepository database)
         {
             _database = database;
@@ -38,6 +32,7 @@ namespace IMDArchitecture.API.Controllers
             Ok((await _database.GetAllUsers())
                 .Select(ViewUser.FromModel).ToList());
 
+
         [HttpGet("{UserId}")]
         [ProducesResponseType(typeof(ViewUser), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -48,7 +43,7 @@ namespace IMDArchitecture.API.Controllers
                 var User = await _database.GetUserById(UserId);
                 if (User != null)
                 {
-                    return Ok(ViewUser.FromModel(User));//event
+                    return Ok(ViewUser.FromModel(User));
                 }
                 else
                 {
@@ -58,11 +53,10 @@ namespace IMDArchitecture.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Got an error for {nameof(GetUserById)}");
-                // This is just good practice; you never want to expose a raw exception message. There are some libraries/services to handle this
-                // but it's better to take full control of your code.
                 return BadRequest(ex.Message);
             }
         }
+
 
         [HttpDelete("{UserId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -89,6 +83,7 @@ namespace IMDArchitecture.API.Controllers
             }
         }
 
+
         [HttpPut("/user/{UserId}")]
         [ProducesResponseType(typeof(ViewUser), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -99,7 +94,6 @@ namespace IMDArchitecture.API.Controllers
                 var editUser = User.updateUser();
                 var persistedUser = await _database.UpdateUser(editUser);
                 return new CreatedResult("/", null);
-                // return CreatedAtAction(nameof(GetUserById), new { id = persistedUser.UserId.ToString() }, ViewUser.FromModel(persistedUser));
             }
             catch (Exception ex)
             {
@@ -118,7 +112,6 @@ namespace IMDArchitecture.API.Controllers
                 var createUser = User.ToUser();
                 var persistedUser = await _database.CreateUser(createUser);
                 return new CreatedResult("/", null);
-                // return CreatedAtAction(nameof(GetUserById), new { id = createUser.UserId.ToString() }, ViewUser.FromModel(persistedUser));
             }
             catch (Exception ex)
             {

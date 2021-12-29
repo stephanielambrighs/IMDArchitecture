@@ -16,14 +16,8 @@ namespace IMDArchitecture.API.Controllers
     [Route("userEvent")]
     public class UserEventController : ControllerBase
     {
-        // noticce we don't care about our actual database implementation; we just pass an interface (== contract)
         private readonly IUserEventRepository _database;
-
-        // everything you use on _logger will end up on STDOUT (the terminal where you started your process)
         private readonly ILogger<UserEventController> _logger;
-
-        // This is called dependency injection; it makes it very easy to test this class as you don't "hardwire" a database in the
-        // test; you pass an interface containing a certain amount of methods. This will become clearer in the following lessons.
         public UserEventController(ILogger<UserEventController> logger, IUserEventRepository database)
         {
             _database = database;
@@ -39,7 +33,7 @@ namespace IMDArchitecture.API.Controllers
                 .Select(ViewUserEvent.FromModel).ToList());
 
 
-        [HttpPost("/event/eventId/enrole")]
+        [HttpPost("/event/enrole")]
         [ProducesResponseType(typeof(ViewUserEvent), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateUserEvent(CreateUserEvent UserEvent)
@@ -50,13 +44,13 @@ namespace IMDArchitecture.API.Controllers
                 var createdUserEvent = UserEvent.ToUserEvent();
                 var persistedUserEvent = await _database.CreateUserEvent(createdUserEvent);
                 return new CreatedResult("/", null);
-                // return CreatedAtAction(nameof(GetEventById), new { id = createdEvent.EventId.ToString() }, ViewEvent.FromModel(persistedEvent));
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
 
         [HttpDelete("{UserEventId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

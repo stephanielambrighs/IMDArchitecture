@@ -25,13 +25,11 @@ namespace IMDArchitecture.API.Models
             await _context.SaveChangesAsync();
         }
 
-
         public async Task<ReadOnlyCollection<User>> GetAllUsers()
         {
             var User = await _context.Users.ToArrayAsync();
             return Array.AsReadOnly(User);
         }
-
 
         public async Task<User> GetUserById(int UserId)
         {

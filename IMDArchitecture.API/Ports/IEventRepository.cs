@@ -11,9 +11,9 @@ namespace IMDArchitecture.API.Ports
     {
         Task<ReadOnlyCollection<Event>> GetAllEvents();
         Task<Event> GetEventById(int EventId);
+        Task<Event[]> GetEventByAge(int age);
         Task<Event> CreateEvent(Event Event);
         Task<Event> UpdateEvent(Event Event);
         Task DeleteEvent(Event Event);
-
     }
 }

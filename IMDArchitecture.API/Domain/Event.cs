@@ -17,9 +17,10 @@ namespace IMDArchitecture.API.Domain
         public int EventId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int Date { get; set; }
+        public DateTime Date { get; set; }
         public int ParticipantCount { get; set; }
-        public int TargetAge { get; set; }
+        public int MinAge { get; set; }
+        public int MaxAge { get; set; }
         public ICollection<UserEvent> UserEvents { get; set; }
     }
 }

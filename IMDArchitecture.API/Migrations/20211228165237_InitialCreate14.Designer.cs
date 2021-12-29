@@ -3,14 +3,16 @@ using System;
 using IMDArchitecture.API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IMDArchitecture.API.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20211228165237_InitialCreate14")]
+    partial class InitialCreate14
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,8 +24,8 @@ namespace IMDArchitecture.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Date")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
@@ -54,8 +56,8 @@ namespace IMDArchitecture.API.Migrations
                     b.Property<bool>("Administrator")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("DateOfBirth")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")
                         .HasColumnType("TEXT");
@@ -86,8 +88,8 @@ namespace IMDArchitecture.API.Migrations
                     b.Property<int?>("EventsEventId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("RegisterTime")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("RegisterTime")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("UserRelationId")
                         .HasColumnType("INTEGER");
