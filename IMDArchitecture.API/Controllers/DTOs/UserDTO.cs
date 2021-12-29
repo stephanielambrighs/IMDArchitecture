@@ -13,7 +13,7 @@ namespace IMDArchitecture.API.Controllers
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }
-        public int DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public bool Administrator { get; set; }
 
         public User ToUser() => new User { Firstname = this.Firstname, Lastname = this.Lastname, Email = this.Email, DateOfBirth = this.DateOfBirth, Administrator = this.Administrator };
@@ -25,7 +25,7 @@ namespace IMDArchitecture.API.Controllers
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }
-        public int DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public bool Administrator { get; set; }
 
         public User updateUser() => new User { UserId = this.UserId, Firstname = this.Firstname, Lastname = this.Lastname, Email = this.Email, DateOfBirth = this.DateOfBirth, Administrator = this.Administrator };
@@ -37,7 +37,7 @@ namespace IMDArchitecture.API.Controllers
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }
-        public int DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public bool Administrator { get; set; }
         public static ViewUser FromModel(User User) => new ViewUser
         {

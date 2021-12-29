@@ -14,7 +14,7 @@ namespace IMDArchitecture.API.Controllers
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public int Date { get; set; }
+        public DateTime Date { get; set; }
         public int ParticipantCount { get; set; }
         public int MinAge { get; set; }
         public int MaxAge { get; set; }
@@ -26,7 +26,7 @@ namespace IMDArchitecture.API.Controllers
         public int EventId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int Date { get; set; }
+        public DateTime Date { get; set; }
         public int ParticipantCount { get; set; }
         public int MinAge { get; set; }
         public int MaxAge { get; set; }
@@ -38,7 +38,7 @@ namespace IMDArchitecture.API.Controllers
         public int EventId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int Date { get; set; }
+        public DateTime Date { get; set; }
         public int ParticipantCount { get; set; }
         public int MinAge { get; set; }
         public int MaxAge { get; set; }

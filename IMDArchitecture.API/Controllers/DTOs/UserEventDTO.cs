@@ -14,7 +14,7 @@ namespace IMDArchitecture.API.Controllers
     {
         public int UserRelationId { get; set; }
         public int EventRelationId { get; set; }
-        public int RegisterTime { get; set; }
+        public DateTime RegisterTime { get; set; }
         public bool Enrolled { get; set; }
         public UserEvent ToUserEvent() => new UserEvent { UserRelationId = this.UserRelationId, EventRelationId = this.EventRelationId, RegisterTime = this.RegisterTime, Enrolled = this.Enrolled };
     }
@@ -25,7 +25,7 @@ namespace IMDArchitecture.API.Controllers
         public int UserRelationId { get; set; }
         public int EventRelationId { get; set; }
         public bool Enrolled { get; set; }
-        public int RegisterTime { get; set; }
+        public DateTime RegisterTime { get; set; }
         public static ViewUserEvent FromModel(UserEvent UserEvent) => new ViewUserEvent
         {
             UserEventId = UserEvent.UserEventId,
