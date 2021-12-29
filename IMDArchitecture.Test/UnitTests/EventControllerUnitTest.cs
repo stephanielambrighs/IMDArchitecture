@@ -94,5 +94,73 @@ namespace IMDArchitecture.Test.UnitTests
             _mockedLogger.VerifyAll();
             _mockedDatabaseEvent.VerifyAll();
         }
+
+
+        [Fact]
+        public async Task GetEventByAge_HappyPath()
+        {
+            // arrange
+            // this is our happy flow: we ask for the id of an existing application
+            var minAge = 10;
+            var maxAge = 90;
+            var testAge = 70;
+            var ourEvent = new Event { EventId = 1, Name = "yes", Description = "New Event", Date = Convert.ToDateTime("2018-11-05 11:38:56.307"), ParticipantCount = 2, MinAge = minAge, MaxAge = maxAge };
+            // set up the mock so that when we call the 'GetMovieById' method we return a predefined task
+            // No database calls are happening here.
+            _mockedDatabaseEvent.Setup(x => x.GetEventByAge(testAge));
+            // act
+            var controller = new EventController(_mockedLogger.Object, _mockedDatabaseEvent.Object);
+            var actualResult = await controller.GetEventByAge(testAge) as OkObjectResult;
+
+            // assert
+            Assert.Equal(200, actualResult.StatusCode);
+
+            _mockedLogger.VerifyAll();
+            _mockedDatabaseEvent.VerifyAll();
+        }
+
+        [Fact]
+        public async Task GetEventByAge_DoesntExist()
+        {
+            // arrange
+            // this is our happy flow: we ask for the id of an existing application
+            var minAge = 10;
+            var maxAge = 90;
+            var testAge = 70;
+            var ourEvent = new Event { EventId = 1, Name = "yes", Description = "New Event", Date = Convert.ToDateTime("2018-11-05 11:38:56.307"), ParticipantCount = 2, MinAge = minAge, MaxAge = maxAge };
+            // set up the mock so that when we call the 'GetMovieById' method we return a predefined task
+            // No database calls are happening here.
+            _mockedDatabaseEvent.Setup(x => x.GetEventByAge(testAge)).Returns(Task.FromResult(null as Event[]));
+            // act
+            var controller = new EventController(_mockedLogger.Object, _mockedDatabaseEvent.Object);
+            // assert
+            var result = await new EventController(_mockedLogger.Object, _mockedDatabaseEvent.Object).GetEventByAge(testAge);
+            Assert.IsType<NotFoundResult>(result);
+
+            _mockedLogger.VerifyAll();
+            _mockedDatabaseEvent.VerifyAll();
+        }
+
+        [Fact]
+        public async Task GetEventByAge_ErrorOnRetrievalAsync()
+        {
+            // arrange
+            // this is our happy flow: we ask for the id of an existing application
+            var minAge = 10;
+            var maxAge = 90;
+            var testAge = 70;
+            var ourEvent = new Event { EventId = 1, Name = "yes", Description = "New Event", Date = Convert.ToDateTime("2018-11-05 11:38:56.307"), ParticipantCount = 2, MinAge = minAge, MaxAge = maxAge };
+            // set up the mock so that when we call the 'GetMovieById' method we return a predefined task
+            // No database calls are happening here.
+            _mockedDatabaseEvent.Setup(x => x.GetEventByAge(testAge)).ThrowsAsync(new Exception("Incorrect"));
+            // act
+            var result = await new EventController(_mockedLogger.Object, _mockedDatabaseEvent.Object).GetEventByAge(testAge);
+
+            // assert
+            Assert.IsType<BadRequestObjectResult>(result);
+
+            _mockedLogger.VerifyAll();
+            _mockedDatabaseEvent.VerifyAll();
+        }
     }
 }
