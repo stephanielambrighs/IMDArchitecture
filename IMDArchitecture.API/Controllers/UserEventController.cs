@@ -16,14 +16,8 @@ namespace IMDArchitecture.API.Controllers
     [Route("userEvent")]
     public class UserEventController : ControllerBase
     {
-        // noticce we don't care about our actual database implementation; we just pass an interface (== contract)
         private readonly IUserEventRepository _database;
-
-        // everything you use on _logger will end up on STDOUT (the terminal where you started your process)
         private readonly ILogger<UserEventController> _logger;
-
-        // This is called dependency injection; it makes it very easy to test this class as you don't "hardwire" a database in the
-        // test; you pass an interface containing a certain amount of methods. This will become clearer in the following lessons.
         public UserEventController(ILogger<UserEventController> logger, IUserEventRepository database)
         {
             _database = database;
@@ -56,6 +50,7 @@ namespace IMDArchitecture.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
 
         [HttpDelete("{UserEventId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

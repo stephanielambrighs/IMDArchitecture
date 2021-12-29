@@ -15,6 +15,5 @@ namespace IMDArchitecture.API.Ports
         Task<Event> CreateEvent(Event Event);
         Task<Event> UpdateEvent(Event Event);
         Task DeleteEvent(Event Event);
-
     }
 }

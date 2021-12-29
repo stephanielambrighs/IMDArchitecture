@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IMDArchitecture.API.Domain
 {
-
+    // this is a domain model. It contains the full representation of an entity within our domain.
     public class UserEvent
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

@@ -34,11 +34,13 @@ namespace IMDArchitecture.API.Models
         {
             return await _context.Events.FindAsync(EventId);
         }
+
         public async Task<Event[]> GetEventByAge(int age)
         {
             var events = await _context.Events.Where(x => x.MinAge <= age && age <= x.MaxAge).ToArrayAsync();
             return events;
         }
+
         public async Task<Event> CreateEvent(Event Event)
         {
             _context.Events.Update(Event);

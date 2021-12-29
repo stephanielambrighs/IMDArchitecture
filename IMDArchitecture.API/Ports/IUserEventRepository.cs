@@ -13,6 +13,5 @@ namespace IMDArchitecture.API.Ports
         Task<UserEvent> GetUserEventById(int UserEventId);
         Task<UserEvent> CreateUserEvent(UserEvent UserEvents);
         Task DeleteUserEvent(UserEvent UserEvents);
-
     }
 }
