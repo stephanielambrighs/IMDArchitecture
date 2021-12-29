@@ -32,20 +32,20 @@ namespace IMDArchitecture.Test.UnitTests
         {
             // arrange
             // this is our happy flow: we ask for the id of an existing application
-            var ourId = Guid.NewGuid();
-            var ourUser = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", DateOfBirth = 20, Administrator = false };
+            var ourId = 1;
+            var ourUser = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", DateOfBirth = Convert.ToDateTime("2018-11-05 11:38:56.307"), Administrator = false };
             // set up the mock so that when we call the 'GetMovieById' method we return a predefined task
             // No database calls are happening here.
             _mockedDatabaseUser.Setup(x => x.GetUserById(ourId)).Returns(Task.FromResult(ourUser));
 
             // act
             var controller = new UserController(_mockedLogger.Object, _mockedDatabaseUser.Object);
-            var actualResult = await controller.GetUserById(ourId.ToString()) as OkObjectResult;
+            var actualResult = await controller.GetUserById(ourId) as OkObjectResult;
 
             // assert
             Assert.Equal(200, actualResult.StatusCode);
             var viewModel = actualResult.Value as ViewUser;
-            Assert.Equal(ourUser.UserId.ToString(), viewModel.UserId);
+            Assert.Equal(ourUser.UserId, viewModel.UserId);
             Assert.Equal(ourUser.Firstname, viewModel.Firstname);
             Assert.Equal(ourUser.Lastname, viewModel.Lastname);
             Assert.Equal(ourUser.Email, viewModel.Email);
@@ -60,8 +60,8 @@ namespace IMDArchitecture.Test.UnitTests
         public async Task TestGetById_DoesntExist()
         {
             // arrange
-            var ourId = Guid.NewGuid();
-            var User = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", DateOfBirth = 20, Administrator = false };
+            var ourId = 1;
+            var User = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", DateOfBirth = Convert.ToDateTime("2018-11-05 11:38:56.307"), Administrator = false };
 
             _mockedDatabaseUser.Setup(x => x.GetUserById(ourId)).Returns(Task.FromResult(null as User));
 
@@ -69,7 +69,7 @@ namespace IMDArchitecture.Test.UnitTests
             var controller = new UserController(_mockedLogger.Object, _mockedDatabaseUser.Object);
 
             // assert
-            var result = await new UserController(_mockedLogger.Object, _mockedDatabaseUser.Object).GetUserById(ourId.ToString());
+            var result = await new UserController(_mockedLogger.Object, _mockedDatabaseUser.Object).GetUserById(ourId);
             Assert.IsType<NotFoundResult>(result);
 
             _mockedLogger.VerifyAll();
@@ -80,13 +80,13 @@ namespace IMDArchitecture.Test.UnitTests
         public async Task TestGetById_ErrorOnRetrievalAsync()
         {
             // arrange
-            var ourId = Guid.NewGuid();
-            var ourUser = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", DateOfBirth = 20, Administrator = false };
+            var ourId = 1;
+            var ourUser = new User { UserId = ourId, Firstname = "Jurien", Lastname = "Rodi", Email = "jurien.rodi@hotmail.com", DateOfBirth = Convert.ToDateTime("2018-11-05 11:38:56.307"), Administrator = false };
 
             _mockedDatabaseUser.Setup(x => x.GetUserById(ourId)).ThrowsAsync(new Exception("Jurien"));
 
             // act
-            var result = await new UserController(_mockedLogger.Object, _mockedDatabaseUser.Object).GetUserById(ourId.ToString());
+            var result = await new UserController(_mockedLogger.Object, _mockedDatabaseUser.Object).GetUserById(ourId);
 
             // assert
             Assert.IsType<BadRequestObjectResult>(result);
