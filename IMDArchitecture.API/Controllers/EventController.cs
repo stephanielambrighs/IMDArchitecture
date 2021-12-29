@@ -61,6 +61,30 @@ namespace IMDArchitecture.API.Controllers
             }
         }
 
+        [HttpGet("getEventByAge/{age}")]
+        [ProducesResponseType(typeof(ViewEvent), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetEventByAge(int age)
+        {
+            try
+            {
+                var eventAge = await _database.GetEventByAge(age);
+                if (eventAge != null)
+                {
+                    return Ok(eventAge);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Got an error for {nameof(GetEventByAge)}");
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpDelete("{EventId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
