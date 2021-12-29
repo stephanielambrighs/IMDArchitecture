@@ -15,10 +15,9 @@ namespace IMDArchitecture.API.Controllers
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
-        public int ParticipantCount { get; set; }
         public int MinAge { get; set; }
         public int MaxAge { get; set; }
-        public Event ToEvent() => new Event { Name = this.Name, Description = this.Description, Date = this.Date, ParticipantCount = this.ParticipantCount, MinAge = this.MinAge, MaxAge = this.MaxAge };
+        public Event ToEvent() => new Event { Name = this.Name, Description = this.Description, Date = this.Date, MinAge = this.MinAge, MaxAge = this.MaxAge };
     }
 
     public class UpdateEvent
@@ -27,10 +26,9 @@ namespace IMDArchitecture.API.Controllers
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime Date { get; set; }
-        public int ParticipantCount { get; set; }
         public int MinAge { get; set; }
         public int MaxAge { get; set; }
-        public Event updateEvent() => new Event { EventId = this.EventId, Name = this.Name, Description = this.Description, Date = this.Date, ParticipantCount = this.ParticipantCount, MinAge = this.MinAge, MaxAge = this.MaxAge };
+        public Event updateEvent() => new Event { EventId = this.EventId, Name = this.Name, Description = this.Description, Date = this.Date, MinAge = this.MinAge, MaxAge = this.MaxAge };
     }
 
     public class ViewEvent

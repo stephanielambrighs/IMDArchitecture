@@ -39,7 +39,7 @@ namespace IMDArchitecture.API.Controllers
                 .Select(ViewUserEvent.FromModel).ToList());
 
 
-        [HttpPost("/event/eventId/enrole")]
+        [HttpPost("/event/enrole")]
         [ProducesResponseType(typeof(ViewUserEvent), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateUserEvent(CreateUserEvent UserEvent)
@@ -50,7 +50,6 @@ namespace IMDArchitecture.API.Controllers
                 var createdUserEvent = UserEvent.ToUserEvent();
                 var persistedUserEvent = await _database.CreateUserEvent(createdUserEvent);
                 return new CreatedResult("/", null);
-                // return CreatedAtAction(nameof(GetEventById), new { id = createdEvent.EventId.ToString() }, ViewEvent.FromModel(persistedEvent));
             }
             catch (Exception ex)
             {
